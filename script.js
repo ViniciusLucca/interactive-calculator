@@ -1,3 +1,13 @@
+let btnNums = document.querySelectorAll('.btnItem');
+let display = document.querySelector('#displayText');
+
+btnNums.forEach(element => {
+    element.addEventListener('click', type);
+});
+
+function type(e){
+    display.value +=  e.target.value;
+}
 function add(num1, num2){
     return num1 + num2;
 }
