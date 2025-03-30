@@ -4,10 +4,16 @@ let display = document.querySelector('#displayText');
 btnNums.forEach(element => {
     element.addEventListener('click', type);
 });
+document.querySelector('#clear').addEventListener('click', clear);
 
 function type(e){
     display.value +=  e.target.value;
 }
+
+function clear(){
+    display.value = '';
+}
+
 function add(num1, num2){
     return num1 + num2;
 }
