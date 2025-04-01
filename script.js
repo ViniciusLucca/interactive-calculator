@@ -11,9 +11,14 @@ btnNums.forEach(element => {
 btnOps.forEach(element => {
     element.addEventListener('click', addOperator);
 })
-document.querySelector('#clear').addEventListener('click', clear);
-document.querySelector('#equals').addEventListener('click', () => operate(nums.first, currentOp, nums.second));
 
+document.querySelector('#clear').addEventListener('click', clear);
+document.querySelector('#equals').addEventListener('click', () => {getOperators(); operate(nums.first, currentOp, nums.second)});
+
+function getOperators(){
+    nums.first = +((display.value).split(currentOp))[0];
+    nums.second = +((display.value).split(currentOp))[1];
+}
 function addOperator(e){
     if (currentOp == undefined) {
         type(e);
@@ -21,11 +26,14 @@ function addOperator(e){
     else {
         if (isNaN(+display.value[display.value.length - 1]))
         {
-            display.value = toString(Array.from(display.value).splice(display.value.length - 1, 1));
+            
+            display.value = display.value.slice(0, display.value.length - 1);
+            type(e)
         } else{
             nums.first = +((display.value).split(e.target.value))[0];
             nums.second = +((display.value).split(e.target.value))[1];
-            console.log(operate(nums.first, currentOp, nums.second))
+            operate(nums.first, currentOp, nums.second);
+            return;
         }
     }
     currentOp = e.target.value;
@@ -39,7 +47,11 @@ function type(e){
 function clear(){
     display.value = '';
 }
-
+function reset(){
+    nums.first = undefined;
+    nums.last = undefined;
+    currentOp = undefined;
+}
 function add(num1, num2){
     return num1 + num2;
 }
@@ -53,25 +65,34 @@ function multiply(num1, num2){
 }
 
 function divide(num1, num2){
+    if (num2 == 0) {
+        alert("Error: it's not possible to divide by 0!");
+        return 0;
+    }
     return num1 / num2;
 }
 
-function operate(num1, operator, num2){
+function operate(num1, operator = '+', num2 = 0){
+    let result;
     switch (operator) {
         case "+":
-            console.log(add(num1, num2));
+            result = add(num1, num2);
             break;
         case "-":
-            subtract(num1, num2);
+            result = subtract(num1, num2);
             break;
         case "*":
-            multiply(num1, num2);
+            result = multiply(num1, num2);
             break;
         case "/":
-            divide(num1, num2);
+            result = divide(num1, num2);
             break;
     
         default:
             break;
     }
+    console.log(result);
+    reset();
+    clear();
+    display.placeholder = result ?? 0;
 }
